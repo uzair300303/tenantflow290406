@@ -5,6 +5,7 @@ import 'package:tenantflow/components/my_textfield.dart';
 import 'package:tenantflow/components/square_tile.dart';
 import 'package:tenantflow/pages/register_page.dart';
 import 'package:tenantflow/pages/auth_service.dart';
+import 'package:provider/provider.dart'; // Added for consistency with other pages
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -151,7 +152,7 @@ class _LoginPageState extends State<LoginPage> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Colors.blue.shade50, Colors.white],
+            colors: [Theme.of(context).scaffoldBackgroundColor, Colors.white],
           ),
         ),
         child: SafeArea(
@@ -170,7 +171,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Text(
                       'Welcome to TenantFlow',
                       style: TextStyle(
-                        color: Colors.blue.shade900,
+                        color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.blue.shade900,
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins',
@@ -206,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: Text(
                         'Forgot Password?',
                         style: TextStyle(
-                          color: isResetting ? Colors.grey : Colors.blue.shade700,
+                          color: isResetting ? Colors.grey : Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600,
                           fontFamily: 'Poppins',
                         ),
@@ -280,7 +281,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             'Register now',
                             style: TextStyle(
-                              color: Colors.blue.shade700,
+                              color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Poppins',
                             ),
