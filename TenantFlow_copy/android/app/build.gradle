@@ -1,0 +1,35 @@
+plugins {
+    id "com.android.application"
+    id "org.jetbrains.kotlin.android"
+    id "com.google.gms.google-services"
+}
+
+android {
+    namespace "com.distinkt" // Matches Firebase
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.distinkt" // Matches Firebase
+        minSdk 21
+        targetSdk 34
+        versionCode flutterVersionCode.toInteger()
+        versionName flutterVersionName
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.debug
+        }
+    }
+}
+
+flutter {
+    source '../..'
+}
+
+dependencies {
+    implementation platform('com.google.firebase:firebase-bom:33.5.0')
+    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.firebase:firebase-core'
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.20'
+}

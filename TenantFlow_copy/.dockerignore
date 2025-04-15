@@ -1,0 +1,6 @@
+build/
+.android/
+.ios/
+.git/
+.gitignore
+pubspec.lock

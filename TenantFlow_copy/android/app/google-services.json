@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "788480188250",
+    "project_id": "oauth-2c942",
+    "storage_bucket": "oauth-2c942.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:788480188250:android:4a2b1f2336ab92aee29d63",
+        "android_client_info": {
+          "package_name": "com.distinkt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCAnh_bi2ZV09igQjB4IIxrCOzTY117Z4U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
