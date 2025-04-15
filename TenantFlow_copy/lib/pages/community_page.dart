@@ -45,11 +45,14 @@ class CommunityPage extends StatelessWidget {
               if (user != null) {
                 String uid = user.uid;
                 print("Adding event with UID: $uid"); // Log UID when adding event
-                // Ensure users document exists
-                await FirebaseFirestore.instance.collection('users').doc(uid).set(
-                  {'admin': false},
-                  SetOptions(merge: true),
-                );
+                // Check if document exists before setting admin: false
+                DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+                if (!userDoc.exists) {
+                  await FirebaseFirestore.instance.collection('users').doc(uid).set(
+                    {'admin': false},
+                    SetOptions(merge: true),
+                  );
+                }
                 await FirebaseFirestore.instance.collection('community_events').add({
                   'title': _titleController.text,
                   'description': _descriptionController.text,
@@ -156,13 +159,6 @@ class CommunityPage extends StatelessWidget {
                 if (userSnapshot.hasData && userSnapshot.data!.exists) {
                   isAdmin = userSnapshot.data!.get('admin') ?? false;
                   print("Is Admin: $isAdmin"); // Debug log
-                } else {
-                  // Create default user document if it doesn't exist
-                  FirebaseFirestore.instance.collection('users').doc(user.uid).set(
-                    {'admin': false},
-                    SetOptions(merge: true),
-                  );
-                  print("Created default user document with admin: false");
                 }
                 return isAdmin
                     ? FloatingActionButton(
