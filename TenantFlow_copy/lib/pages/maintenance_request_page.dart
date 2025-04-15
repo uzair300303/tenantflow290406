@@ -117,9 +117,7 @@ class _MaintenanceRequestPageState extends State<MaintenanceRequestPage> {
     });
 
     try {
-      // Simulate ticket raising with a unique ID
       _ticketId = 'TICKET-${DateTime.now().millisecondsSinceEpoch}';
-      // Simulate status update logic
       Future.delayed(const Duration(hours: 1), () {
         if (mounted) {
           setState(() {
@@ -137,10 +135,7 @@ class _MaintenanceRequestPageState extends State<MaintenanceRequestPage> {
         }
       });
 
-      // Get the logged-in user's email
-      final userEmail = AuthService().getCurrentUser()?.email ?? 'user@example.com'; // Use getCurrentUser()
-
-      // Store ticket in Firestore
+      final userEmail = AuthService().getCurrentUser()?.email ?? 'user@example.com';
       await _firestore.collection('tickets').doc(_ticketId).set({
         'userEmail': userEmail,
         'priority': _priority,
@@ -152,7 +147,6 @@ class _MaintenanceRequestPageState extends State<MaintenanceRequestPage> {
         'timestamp': DateTime.now(),
       });
 
-      // In-app confirmation (simulating email)
       final confirmationMessage = '''
 Ticket Confirmation - $_ticketId
 Dear $userEmail,
@@ -204,6 +198,51 @@ TenantFlow Team
         'status': _ticketStatus,
       });
     }
+  }
+
+  Future<void> _showHistory() async {
+    final userEmail = AuthService().getCurrentUser()?.email ?? 'user@example.com';
+    final snapshot = await _firestore
+        .collection('tickets')
+        .where('userEmail', isEqualTo: userEmail)
+        .get();
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Ticket History', style: TextStyle(fontFamily: 'Poppins')),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: snapshot.docs.length,
+            itemBuilder: (context, index) {
+              final ticket = snapshot.docs[index];
+              return ListTile(
+                title: Text('Ticket ${ticket.id}', style: const TextStyle(fontFamily: 'Poppins')),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Status: ${ticket['status']}', style: const TextStyle(fontFamily: 'Poppins')),
+                    Text('Priority: ${ticket['priority']}', style: const TextStyle(fontFamily: 'Poppins')),
+                    Text('Description: ${ticket['description']}', style: const TextStyle(fontFamily: 'Poppins')),
+                    Text('Estimated Resolution: ${ticket['estimatedResolution']}', style: const TextStyle(fontFamily: 'Poppins')),
+                    Text('Images: ${ticket['imagesCount']}', style: const TextStyle(fontFamily: 'Poppins')),
+                    Text('Videos: ${ticket['videosCount']}', style: const TextStyle(fontFamily: 'Poppins')),
+                    Text('Timestamp: ${ticket['timestamp'].toDate()}', style: const TextStyle(fontFamily: 'Poppins')),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Close', style: TextStyle(fontFamily: 'Poppins')),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -317,6 +356,11 @@ TenantFlow Team
                     style: const TextStyle(fontFamily: 'Poppins', color: Colors.green),
                   ),
                 ),
+              const SizedBox(height: 10),
+              MyButton(
+                onTap: _showHistory,
+                text: 'View History',
+              ),
               const SizedBox(height: 20),
               isLoading
                   ? const CircularProgressIndicator(color: Colors.blue)
